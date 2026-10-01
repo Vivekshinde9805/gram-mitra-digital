@@ -14,16 +14,345 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      applications: {
+        Row: {
+          address: string
+          admin_remark: string | null
+          applicant_name: string
+          created_at: string
+          description: string | null
+          documents: string[]
+          id: string
+          mobile: string
+          ref_no: string
+          service_type: string
+          status: Database["public"]["Enums"]["app_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address: string
+          admin_remark?: string | null
+          applicant_name: string
+          created_at?: string
+          description?: string | null
+          documents?: string[]
+          id?: string
+          mobile: string
+          ref_no?: string
+          service_type: string
+          status?: Database["public"]["Enums"]["app_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          admin_remark?: string | null
+          applicant_name?: string
+          created_at?: string
+          description?: string | null
+          documents?: string[]
+          id?: string
+          mobile?: string
+          ref_no?: string
+          service_type?: string
+          status?: Database["public"]["Enums"]["app_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      complaints: {
+        Row: {
+          admin_remark: string | null
+          category: string
+          created_at: string
+          description: string
+          id: string
+          status: Database["public"]["Enums"]["app_status"]
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_remark?: string | null
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          status?: Database["public"]["Enums"]["app_status"]
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_remark?: string | null
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          status?: Database["public"]["Enums"]["app_status"]
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notices: {
+        Row: {
+          body: string | null
+          body_mr: string | null
+          created_at: string
+          id: string
+          title: string
+          title_mr: string | null
+        }
+        Insert: {
+          body?: string | null
+          body_mr?: string | null
+          created_at?: string
+          id?: string
+          title: string
+          title_mr?: string | null
+        }
+        Update: {
+          body?: string | null
+          body_mr?: string | null
+          created_at?: string
+          id?: string
+          title?: string
+          title_mr?: string | null
+        }
+        Relationships: []
+      }
+      panchayat_info: {
+        Row: {
+          about: string | null
+          about_mr: string | null
+          address: string | null
+          area_sq_km: number | null
+          district: string | null
+          email: string | null
+          households: number | null
+          id: number
+          name: string | null
+          name_mr: string | null
+          office_hours: string | null
+          phone: string | null
+          population: number | null
+          state: string | null
+          taluka: string | null
+          updated_at: string
+          village: string | null
+        }
+        Insert: {
+          about?: string | null
+          about_mr?: string | null
+          address?: string | null
+          area_sq_km?: number | null
+          district?: string | null
+          email?: string | null
+          households?: number | null
+          id?: number
+          name?: string | null
+          name_mr?: string | null
+          office_hours?: string | null
+          phone?: string | null
+          population?: number | null
+          state?: string | null
+          taluka?: string | null
+          updated_at?: string
+          village?: string | null
+        }
+        Update: {
+          about?: string | null
+          about_mr?: string | null
+          address?: string | null
+          area_sq_km?: number | null
+          district?: string | null
+          email?: string | null
+          households?: number | null
+          id?: number
+          name?: string | null
+          name_mr?: string | null
+          office_hours?: string | null
+          phone?: string | null
+          population?: number | null
+          state?: string | null
+          taluka?: string | null
+          updated_at?: string
+          village?: string | null
+        }
+        Relationships: []
+      }
+      panchayat_members: {
+        Row: {
+          created_at: string
+          designation: string
+          designation_mr: string | null
+          id: string
+          name: string
+          phone: string | null
+          sort_order: number | null
+          ward: string | null
+        }
+        Insert: {
+          created_at?: string
+          designation: string
+          designation_mr?: string | null
+          id?: string
+          name: string
+          phone?: string | null
+          sort_order?: number | null
+          ward?: string | null
+        }
+        Update: {
+          created_at?: string
+          designation?: string
+          designation_mr?: string | null
+          id?: string
+          name?: string
+          phone?: string | null
+          sort_order?: number | null
+          ward?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          mobile: string | null
+          updated_at: string
+          village: string | null
+        }
+        Insert: {
+          address?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          mobile?: string | null
+          updated_at?: string
+          village?: string | null
+        }
+        Update: {
+          address?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          mobile?: string | null
+          updated_at?: string
+          village?: string | null
+        }
+        Relationships: []
+      }
+      tax_records: {
+        Row: {
+          amount: number
+          created_at: string
+          due_date: string | null
+          financial_year: string
+          id: string
+          paid_at: string | null
+          receipt_no: string | null
+          status: string
+          tax_type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          due_date?: string | null
+          financial_year: string
+          id?: string
+          paid_at?: string | null
+          receipt_no?: string | null
+          status?: string
+          tax_type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          due_date?: string | null
+          financial_year?: string
+          id?: string
+          paid_at?: string | null
+          receipt_no?: string | null
+          status?: string
+          tax_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      pay_tax: {
+        Args: { _id: string }
+        Returns: {
+          amount: number
+          created_at: string
+          due_date: string | null
+          financial_year: string
+          id: string
+          paid_at: string | null
+          receipt_no: string | null
+          status: string
+          tax_type: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "tax_records"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      app_status:
+        | "pending"
+        | "in_review"
+        | "approved"
+        | "rejected"
+        | "completed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +479,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      app_status: ["pending", "in_review", "approved", "rejected", "completed"],
+    },
   },
 } as const
