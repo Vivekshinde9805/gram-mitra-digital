@@ -35,7 +35,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {links.map((l) => (
         <Link
           key={l.to}
-          to={l.to}
+          to={l.to as "/"}
           onClick={onClick}
           className="rounded-md px-3 py-2 text-sm font-medium text-primary-foreground/85 hover:bg-primary-foreground/10"
           activeProps={{ className: "bg-primary-foreground/15 text-primary-foreground" }}
