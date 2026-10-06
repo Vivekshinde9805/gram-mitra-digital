@@ -143,6 +143,8 @@ export type Database = {
           state: string | null
           taluka: string | null
           updated_at: string
+          upi_id: string | null
+          upi_name: string | null
           village: string | null
         }
         Insert: {
@@ -162,6 +164,8 @@ export type Database = {
           state?: string | null
           taluka?: string | null
           updated_at?: string
+          upi_id?: string | null
+          upi_name?: string | null
           village?: string | null
         }
         Update: {
@@ -181,6 +185,8 @@ export type Database = {
           state?: string | null
           taluka?: string | null
           updated_at?: string
+          upi_id?: string | null
+          upi_name?: string | null
           village?: string | null
         }
         Relationships: []
@@ -262,10 +268,13 @@ export type Database = {
           financial_year: string
           id: string
           paid_at: string | null
+          payment_method: string | null
           receipt_no: string | null
           status: string
+          submitted_at: string | null
           tax_type: string
           user_id: string
+          utr: string | null
         }
         Insert: {
           amount: number
@@ -274,10 +283,13 @@ export type Database = {
           financial_year: string
           id?: string
           paid_at?: string | null
+          payment_method?: string | null
           receipt_no?: string | null
           status?: string
+          submitted_at?: string | null
           tax_type: string
           user_id: string
+          utr?: string | null
         }
         Update: {
           amount?: number
@@ -286,10 +298,13 @@ export type Database = {
           financial_year?: string
           id?: string
           paid_at?: string | null
+          payment_method?: string | null
           receipt_no?: string | null
           status?: string
+          submitted_at?: string | null
           tax_type?: string
           user_id?: string
+          utr?: string | null
         }
         Relationships: []
       }
@@ -323,8 +338,8 @@ export type Database = {
         }
         Returns: boolean
       }
-      pay_tax: {
-        Args: { _id: string }
+      submit_tax_payment: {
+        Args: { _id: string; _utr: string }
         Returns: {
           amount: number
           created_at: string
@@ -332,10 +347,13 @@ export type Database = {
           financial_year: string
           id: string
           paid_at: string | null
+          payment_method: string | null
           receipt_no: string | null
           status: string
+          submitted_at: string | null
           tax_type: string
           user_id: string
+          utr: string | null
         }
         SetofOptions: {
           from: "*"
