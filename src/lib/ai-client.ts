@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export async function streamAI(body: Record<string, unknown>, onText: (full: string) => void, signal?: AbortSignal) {
+export async function streamAI(body: Record<string, unknown>, onText: (full: string) => void, signal: AbortSignal | null = null) {
   const { data } = await supabase.auth.getSession();
   const res = await fetch("/api/ai", {
     method: "POST",
