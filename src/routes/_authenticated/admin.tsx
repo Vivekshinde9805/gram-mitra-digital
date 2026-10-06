@@ -71,8 +71,8 @@ function Admin() {
     e.preventDefault();
     const form = e.currentTarget;
     const f = Object.fromEntries(new FormData(form)) as Record<string, string>;
-    if (f.title.trim().length < 3) return toast.error("Title required");
-    const { error } = await supabase.from("notices").insert(f);
+    if ((f.title ?? "").trim().length < 3) return toast.error("Title required");
+    const { error } = await supabase.from("notices").insert({ title: f.title ?? "", title_mr: f.title_mr || null, body: f.body || null, body_mr: f.body_mr || null });
     if (error) return toast.error(error.message);
     toast.success("Notice published"); form.reset(); qc.invalidateQueries({ queryKey: ["panchayat"] });
   };
