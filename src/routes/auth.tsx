@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -38,9 +38,10 @@ function AuthPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
+  const adminFlow = useRef(false);
 
   useEffect(() => {
-    if (user) navigate({ to: "/dashboard" });
+    if (user && !adminFlow.current) navigate({ to: "/dashboard" });
   }, [user, navigate]);
 
   const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -50,6 +51,24 @@ function AuthPage() {
     const { error } = await supabase.auth.signInWithPassword({ email: String(f.get("email")), password: String(f.get("password")) });
     setBusy(false);
     if (error) toast.error(error.message);
+  };
+
+  const onAdminLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    setBusy(true);
+    adminFlow.current = true;
+    const { data, error } = await supabase.auth.signInWithPassword({ email: String(f.get("email")), password: String(f.get("password")) });
+    if (error || !data.user) { setBusy(false); adminFlow.current = false; return toast.error(error?.message ?? "Sign in failed"); }
+    const { data: role } = await supabase.from("user_roles").select("role").eq("user_id", data.user.id).eq("role", "admin").maybeSingle();
+    setBusy(false);
+    if (!role) {
+      await supabase.auth.signOut();
+      adminFlow.current = false;
+      return toast.error("This account does not have admin access.");
+    }
+    toast.success("Welcome, Admin");
+    navigate({ to: "/admin" });
   };
 
   const onSignup = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -81,9 +100,10 @@ function AuthPage() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="login">{t("login")}</TabsTrigger>
               <TabsTrigger value="signup">{t("signup")}</TabsTrigger>
+              <TabsTrigger value="admin">{t("adminLogin")}</TabsTrigger>
             </TabsList>
             <TabsContent value="login">
               <form onSubmit={onLogin} className="space-y-4 pt-2">
@@ -100,6 +120,14 @@ function AuthPage() {
                 <Field name="email" label={t("email")} type="email" />
                 <Field name="password" label={t("password")} type="password" />
                 <Button className="w-full" disabled={busy}>{t("signup")}</Button>
+              </form>
+            </TabsContent>
+            <TabsContent value="admin">
+              <form onSubmit={onAdminLogin} className="space-y-4 pt-2">
+                <p className="rounded-md bg-muted p-3 text-xs text-muted-foreground">For Panchayat staff only. Your account must have admin access.</p>
+                <Field name="email" label={t("email")} type="email" />
+                <Field name="password" label={t("password")} type="password" />
+                <Button className="w-full" disabled={busy}>{t("adminLogin")}</Button>
               </form>
             </TabsContent>
           </Tabs>

@@ -77,6 +77,26 @@ function Admin() {
     toast.success("Notice published"); form.reset(); qc.invalidateQueries({ queryKey: ["panchayat"] });
   };
 
+  const setTax = async (id: string, status: "paid" | "rejected", method?: string) => {
+    const patch = status === "paid"
+      ? { status, paid_at: new Date().toISOString(), receipt_no: "RCPT-" + crypto.randomUUID().slice(0, 8).toUpperCase(), ...(method ? { payment_method: method } : {}) }
+      : { status };
+    const { error } = await supabase.from("tax_records").update(patch).eq("id", id);
+    if (error) return toast.error(error.message);
+    toast.success(status === "paid" ? "Marked as paid, receipt issued" : "Payment rejected");
+    refresh();
+  };
+
+  const saveUpi = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    const upi_id = String(f.get("upi_id")).trim();
+    if (!/^[\w.-]{2,}@[a-zA-Z]{2,}$/.test(upi_id)) return toast.error("Enter a valid UPI ID, e.g. name@oksbi");
+    const { error } = await supabase.from("panchayat_info").update({ upi_id, upi_name: String(f.get("upi_name")).trim() }).eq("id", 1);
+    if (error) return toast.error(error.message);
+    toast.success("UPI details saved"); qc.invalidateQueries({ queryKey: ["upi"] });
+  };
+
   const stat = (s: Status) => data?.apps.filter((a) => a.status === s).length ?? 0;
 
   return (
@@ -135,6 +155,12 @@ function Admin() {
 
         <TabsContent value="taxes" className="space-y-4">
           <Card>
+            <CardHeader><CardTitle>UPI payment account</CardTitle></CardHeader>
+            <CardContent>
+              <UpiForm onSubmit={saveUpi} />
+            </CardContent>
+          </Card>
+          <Card>
             <CardHeader><CardTitle>Add tax record</CardTitle></CardHeader>
             <CardContent>
               <form onSubmit={addTax} className="grid gap-3 sm:grid-cols-6">
@@ -152,10 +178,23 @@ function Admin() {
           </Card>
           <Card><CardContent className="overflow-x-auto pt-6">
             <Table>
-              <TableHeader><TableRow><TableHead>Villager</TableHead><TableHead>Tax</TableHead><TableHead>Year</TableHead><TableHead>Amount</TableHead><TableHead>{t("status")}</TableHead><TableHead>Receipt</TableHead></TableRow></TableHeader>
+              <TableHeader><TableRow><TableHead>Villager</TableHead><TableHead>Tax</TableHead><TableHead>Year</TableHead><TableHead>Amount</TableHead><TableHead>{t("status")}</TableHead><TableHead>UTR / Receipt</TableHead><TableHead>Action</TableHead></TableRow></TableHeader>
               <TableBody>
                 {data?.taxes.map((r) => (
-                  <TableRow key={r.id}><TableCell>{name(r.user_id)}</TableCell><TableCell className="capitalize">{r.tax_type}</TableCell><TableCell>{r.financial_year}</TableCell><TableCell>₹{r.amount}</TableCell><TableCell><StatusBadge status={r.status} /></TableCell><TableCell className="font-mono text-xs">{r.receipt_no ?? "—"}</TableCell></TableRow>
+                  <TableRow key={r.id}>
+                    <TableCell>{name(r.user_id)}</TableCell><TableCell className="capitalize">{r.tax_type}</TableCell><TableCell>{r.financial_year}</TableCell><TableCell>₹{r.amount}</TableCell>
+                    <TableCell><StatusBadge status={r.status} /></TableCell>
+                    <TableCell className="font-mono text-xs">{r.utr && <p>UTR: {r.utr}</p>}{r.receipt_no ?? (r.utr ? "" : "—")}</TableCell>
+                    <TableCell className="space-x-2 whitespace-nowrap">
+                      {r.status === "verifying" && (<>
+                        <Button size="sm" onClick={() => setTax(r.id, "paid")}>Verify</Button>
+                        <Button size="sm" variant="outline" onClick={() => setTax(r.id, "rejected")}>Reject</Button>
+                      </>)}
+                      {(r.status === "unpaid" || r.status === "rejected") && (
+                        <Button size="sm" variant="outline" onClick={() => setTax(r.id, "paid", "Cash")}>Mark paid (cash)</Button>
+                      )}
+                    </TableCell>
+                  </TableRow>
                 ))}
               </TableBody>
             </Table>
@@ -178,6 +217,21 @@ function Admin() {
         </TabsContent>
       </Tabs>
     </>
+  );
+}
+
+function UpiForm({ onSubmit }: { onSubmit: (e: React.FormEvent<HTMLFormElement>) => void }) {
+  const { data } = useQuery({
+    queryKey: ["upi"],
+    queryFn: async () => (await supabase.from("panchayat_info").select("upi_id,upi_name").eq("id", 1).maybeSingle()).data,
+  });
+  if (!data) return null;
+  return (
+    <form onSubmit={onSubmit} className="grid gap-3 sm:grid-cols-3">
+      <Input name="upi_id" defaultValue={data.upi_id ?? ""} placeholder="UPI ID" />
+      <Input name="upi_name" defaultValue={data.upi_name ?? ""} placeholder="Payee name" />
+      <Button className="sm:w-fit">Save</Button>
+    </form>
   );
 }
 
