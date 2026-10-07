@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
+import { CitizenConnections } from "@/components/CitizenConnections";
 import { useQuery } from "@tanstack/react-query";
 import { FileText, Receipt, MessageSquareWarning, Bot, PlusCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/_authenticated/citizen")({
 
 function Dashboard() {
   const { t } = useI18n();
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { data } = useQuery({
     queryKey: ["dashboard", user?.id],
     enabled: !!user,
@@ -38,6 +39,7 @@ function Dashboard() {
     { icon: Bot, label: t("assistant"), value: "AI", to: "/assistant" },
   ];
 
+  if (isAdmin) return <Navigate to="/dashboard" />;
   return (
     <>
       <PageTitle title={`${t("welcome")}, ${data?.name ?? ""}`} />
@@ -50,6 +52,7 @@ function Dashboard() {
           </Link>
         ))}
       </div>
+      <CitizenConnections />
       <Card className="mt-6">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>{t("applications")}</CardTitle>
