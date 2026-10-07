@@ -1,0 +1,1 @@
+alter table public.tax_records add column admin_remark text;

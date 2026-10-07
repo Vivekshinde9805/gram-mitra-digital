@@ -351,6 +351,7 @@ export type Database = {
       }
       tax_records: {
         Row: {
+          admin_remark: string | null
           amount: number
           created_at: string
           due_date: string | null
@@ -366,6 +367,7 @@ export type Database = {
           utr: string | null
         }
         Insert: {
+          admin_remark?: string | null
           amount: number
           created_at?: string
           due_date?: string | null
@@ -381,6 +383,7 @@ export type Database = {
           utr?: string | null
         }
         Update: {
+          admin_remark?: string | null
           amount?: number
           created_at?: string
           due_date?: string | null
@@ -454,6 +457,7 @@ export type Database = {
       submit_tax_payment: {
         Args: { _id: string; _utr: string }
         Returns: {
+          admin_remark: string | null
           amount: number
           created_at: string
           due_date: string | null
