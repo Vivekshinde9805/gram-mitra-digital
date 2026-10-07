@@ -62,13 +62,13 @@ export function AppShell({ children }: { children: ReactNode }) {
           </nav>
           <div className="ml-auto flex items-center gap-2">
             <div className="flex overflow-hidden rounded-md border border-primary-foreground/30 text-xs">
-              {(["en", "mr"] as const).map((l) => (
+              {(["en", "mr", "hi"] as const).map((l) => (
                 <button
                   key={l}
                   onClick={() => setLang(l)}
                   className={`px-2.5 py-1.5 ${lang === l ? "bg-accent text-accent-foreground" : "text-primary-foreground"}`}
                 >
-                  {l === "en" ? "EN" : "मराठी"}
+                  {l === "en" ? "EN" : l === "mr" ? "मराठी" : "हिंदी"}
                 </button>
               ))}
             </div>
