@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 const authedLinks: { to: string; k: TKey }[] = [
-  { to: "/dashboard", k: "dashboard" },
+  { to: "/citizen", k: "citizen" },
   { to: "/apply", k: "services" },
   { to: "/applications", k: "applications" },
   { to: "/taxes", k: "taxes" },
@@ -23,7 +23,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const links = user ? [...authedLinks, ...(isAdmin ? [{ to: "/admin", k: "admin" as TKey }] : [])] : [{ to: "/", k: "home" as TKey }];
+  const adminLinks: { to: string; k: TKey }[] = [{ to: "/dashboard", k: "admin" }, { to: "/assistant", k: "assistant" }, { to: "/profile", k: "profile" }];
+  const links = user ? (isAdmin ? adminLinks : authedLinks) : [{ to: "/", k: "home" as TKey }];
 
   const signOut = async () => {
     await supabase.auth.signOut();

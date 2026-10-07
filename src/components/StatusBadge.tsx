@@ -9,6 +9,11 @@ const styles: Record<string, string> = {
   verifying: "bg-info/15 text-info border-info/40",
   paid: "bg-success/15 text-success border-success/40",
   rejected: "bg-destructive/10 text-destructive border-destructive/40",
+  Pending: "bg-info/15 text-info border-info/40",
+  Verified: "bg-success/15 text-success border-success/40",
+  Paid: "bg-success/15 text-success border-success/40",
+  Unpaid: "bg-warning/20 text-foreground border-warning",
+  Overdue: "bg-destructive/10 text-destructive border-destructive/40",
   unpaid: "bg-destructive/10 text-destructive border-destructive/40",
 };
 

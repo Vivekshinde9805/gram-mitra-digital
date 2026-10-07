@@ -8,8 +8,8 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
 
-export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — Gram Panchayat Portal" }, { name: "description", content: "Your village services at a glance." }] }),
+export const Route = createFileRoute("/_authenticated/citizen")({
+  head: () => ({ meta: [{ title: "Citizen Home — Gram Panchayat Portal" }, { name: "description", content: "Your village services at a glance." }] }),
   component: Dashboard,
 });
 
