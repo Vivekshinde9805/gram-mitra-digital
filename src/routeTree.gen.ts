@@ -17,6 +17,7 @@ import { Route as AuthenticatedApplyRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedAssistantRouteImport } from './routes/_authenticated/assistant'
 import { Route as AuthenticatedCitizenRouteImport } from './routes/_authenticated/citizen'
 import { Route as AuthenticatedComplaintsRouteImport } from './routes/_authenticated/complaints'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedTaxesRouteImport } from './routes/_authenticated/taxes'
 import { Route as ApiAiRouteImport } from './routes/api/ai'
@@ -61,6 +62,11 @@ const AuthenticatedComplaintsRoute = AuthenticatedComplaintsRouteImport.update({
   path: '/complaints',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -85,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/assistant': typeof AuthenticatedAssistantRoute
   '/citizen': typeof AuthenticatedCitizenRoute
   '/complaints': typeof AuthenticatedComplaintsRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/taxes': typeof AuthenticatedTaxesRoute
   '/api/ai': typeof ApiAiRoute
@@ -97,6 +104,7 @@ export interface FileRoutesByTo {
   '/assistant': typeof AuthenticatedAssistantRoute
   '/citizen': typeof AuthenticatedCitizenRoute
   '/complaints': typeof AuthenticatedComplaintsRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/taxes': typeof AuthenticatedTaxesRoute
   '/api/ai': typeof ApiAiRoute
@@ -111,6 +119,7 @@ export interface FileRoutesById {
   '/_authenticated/assistant': typeof AuthenticatedAssistantRoute
   '/_authenticated/citizen': typeof AuthenticatedCitizenRoute
   '/_authenticated/complaints': typeof AuthenticatedComplaintsRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/taxes': typeof AuthenticatedTaxesRoute
   '/api/ai': typeof ApiAiRoute
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/assistant'
     | '/citizen'
     | '/complaints'
+    | '/dashboard'
     | '/profile'
     | '/taxes'
     | '/api/ai'
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/assistant'
     | '/citizen'
     | '/complaints'
+    | '/dashboard'
     | '/profile'
     | '/taxes'
     | '/api/ai'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/_authenticated/assistant'
     | '/_authenticated/citizen'
     | '/_authenticated/complaints'
+    | '/_authenticated/dashboard'
     | '/_authenticated/profile'
     | '/_authenticated/taxes'
     | '/api/ai'
@@ -220,6 +232,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedComplaintsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/profile': {
       id: '/_authenticated/profile'
       path: '/profile'
@@ -250,6 +269,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAssistantRoute: typeof AuthenticatedAssistantRoute
   AuthenticatedCitizenRoute: typeof AuthenticatedCitizenRoute
   AuthenticatedComplaintsRoute: typeof AuthenticatedComplaintsRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedTaxesRoute: typeof AuthenticatedTaxesRoute
 }
@@ -260,6 +280,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAssistantRoute: AuthenticatedAssistantRoute,
   AuthenticatedCitizenRoute: AuthenticatedCitizenRoute,
   AuthenticatedComplaintsRoute: AuthenticatedComplaintsRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedTaxesRoute: AuthenticatedTaxesRoute,
 }
