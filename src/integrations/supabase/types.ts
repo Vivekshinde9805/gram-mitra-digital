@@ -62,6 +62,39 @@ export type Database = {
         }
         Relationships: []
       }
+      citizen_connections: {
+        Row: {
+          address: string
+          citizen_id: string
+          connection_no: string
+          created_at: string
+          id: string
+          meter_no: string | null
+          status: string
+          type: string
+        }
+        Insert: {
+          address: string
+          citizen_id: string
+          connection_no: string
+          created_at?: string
+          id?: string
+          meter_no?: string | null
+          status?: string
+          type: string
+        }
+        Update: {
+          address?: string
+          citizen_id?: string
+          connection_no?: string
+          created_at?: string
+          id?: string
+          meter_no?: string | null
+          status?: string
+          type?: string
+        }
+        Relationships: []
+      }
       complaints: {
         Row: {
           admin_remark: string | null
@@ -97,6 +130,62 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      monthly_bills: {
+        Row: {
+          admin_remark: string | null
+          amount: number
+          connection_id: string
+          created_at: string
+          due_date: string | null
+          id: string
+          month: number
+          paid_at: string | null
+          status: string
+          submitted_at: string | null
+          units: number | null
+          utr: string | null
+          year: number
+        }
+        Insert: {
+          admin_remark?: string | null
+          amount: number
+          connection_id: string
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          month: number
+          paid_at?: string | null
+          status?: string
+          submitted_at?: string | null
+          units?: number | null
+          utr?: string | null
+          year: number
+        }
+        Update: {
+          admin_remark?: string | null
+          amount?: number
+          connection_id?: string
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          month?: number
+          paid_at?: string | null
+          status?: string
+          submitted_at?: string | null
+          units?: number | null
+          utr?: string | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "monthly_bills_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "citizen_connections"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notices: {
         Row: {
@@ -262,6 +351,7 @@ export type Database = {
       }
       tax_records: {
         Row: {
+          admin_remark: string | null
           amount: number
           created_at: string
           due_date: string | null
@@ -277,6 +367,7 @@ export type Database = {
           utr: string | null
         }
         Insert: {
+          admin_remark?: string | null
           amount: number
           created_at?: string
           due_date?: string | null
@@ -292,6 +383,7 @@ export type Database = {
           utr?: string | null
         }
         Update: {
+          admin_remark?: string | null
           amount?: number
           created_at?: string
           due_date?: string | null
@@ -338,9 +430,34 @@ export type Database = {
         }
         Returns: boolean
       }
+      submit_bill_payment: {
+        Args: { _id: string; _utr: string }
+        Returns: {
+          admin_remark: string | null
+          amount: number
+          connection_id: string
+          created_at: string
+          due_date: string | null
+          id: string
+          month: number
+          paid_at: string | null
+          status: string
+          submitted_at: string | null
+          units: number | null
+          utr: string | null
+          year: number
+        }
+        SetofOptions: {
+          from: "*"
+          to: "monthly_bills"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       submit_tax_payment: {
         Args: { _id: string; _utr: string }
         Returns: {
+          admin_remark: string | null
           amount: number
           created_at: string
           due_date: string | null
@@ -364,7 +481,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "user"
+      app_role: "admin" | "citizen"
       app_status:
         | "pending"
         | "in_review"
@@ -498,7 +615,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user"],
+      app_role: ["admin", "citizen"],
       app_status: ["pending", "in_review", "approved", "rejected", "completed"],
     },
   },

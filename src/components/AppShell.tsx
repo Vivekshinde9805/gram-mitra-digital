@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 const authedLinks: { to: string; k: TKey }[] = [
-  { to: "/dashboard", k: "dashboard" },
+  { to: "/citizen", k: "citizen" },
   { to: "/apply", k: "services" },
   { to: "/applications", k: "applications" },
   { to: "/taxes", k: "taxes" },
@@ -23,7 +23,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const links = user ? [...authedLinks, ...(isAdmin ? [{ to: "/admin", k: "admin" as TKey }] : [])] : [{ to: "/", k: "home" as TKey }];
+  const adminLinks: { to: string; k: TKey }[] = [{ to: "/dashboard", k: "admin" }, { to: "/assistant", k: "assistant" }, { to: "/profile", k: "profile" }];
+  const links = user ? (isAdmin ? adminLinks : authedLinks) : [{ to: "/", k: "home" as TKey }];
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -62,13 +63,13 @@ export function AppShell({ children }: { children: ReactNode }) {
           </nav>
           <div className="ml-auto flex items-center gap-2">
             <div className="flex overflow-hidden rounded-md border border-primary-foreground/30 text-xs">
-              {(["en", "mr"] as const).map((l) => (
+              {(["en", "mr", "hi"] as const).map((l) => (
                 <button
                   key={l}
                   onClick={() => setLang(l)}
                   className={`px-2.5 py-1.5 ${lang === l ? "bg-accent text-accent-foreground" : "text-primary-foreground"}`}
                 >
-                  {l === "en" ? "EN" : "मराठी"}
+                  {l === "en" ? "EN" : l === "mr" ? "मराठी" : "हिंदी"}
                 </button>
               ))}
             </div>

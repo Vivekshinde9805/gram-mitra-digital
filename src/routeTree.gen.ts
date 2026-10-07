@@ -12,10 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedApplicationsRouteImport } from './routes/_authenticated/applications'
 import { Route as AuthenticatedApplyRouteImport } from './routes/_authenticated/apply'
 import { Route as AuthenticatedAssistantRouteImport } from './routes/_authenticated/assistant'
+import { Route as AuthenticatedCitizenRouteImport } from './routes/_authenticated/citizen'
 import { Route as AuthenticatedComplaintsRouteImport } from './routes/_authenticated/complaints'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
@@ -36,11 +36,6 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedApplicationsRoute =
   AuthenticatedApplicationsRouteImport.update({
     id: '/applications',
@@ -55,6 +50,11 @@ const AuthenticatedApplyRoute = AuthenticatedApplyRouteImport.update({
 const AuthenticatedAssistantRoute = AuthenticatedAssistantRouteImport.update({
   id: '/assistant',
   path: '/assistant',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedCitizenRoute = AuthenticatedCitizenRouteImport.update({
+  id: '/citizen',
+  path: '/citizen',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedComplaintsRoute = AuthenticatedComplaintsRouteImport.update({
@@ -86,10 +86,10 @@ const ApiAiRoute = ApiAiRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/admin': typeof AuthenticatedAdminRoute
   '/applications': typeof AuthenticatedApplicationsRoute
   '/apply': typeof AuthenticatedApplyRoute
   '/assistant': typeof AuthenticatedAssistantRoute
+  '/citizen': typeof AuthenticatedCitizenRoute
   '/complaints': typeof AuthenticatedComplaintsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -99,10 +99,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/admin': typeof AuthenticatedAdminRoute
   '/applications': typeof AuthenticatedApplicationsRoute
   '/apply': typeof AuthenticatedApplyRoute
   '/assistant': typeof AuthenticatedAssistantRoute
+  '/citizen': typeof AuthenticatedCitizenRoute
   '/complaints': typeof AuthenticatedComplaintsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -114,10 +114,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/applications': typeof AuthenticatedApplicationsRoute
   '/_authenticated/apply': typeof AuthenticatedApplyRoute
   '/_authenticated/assistant': typeof AuthenticatedAssistantRoute
+  '/_authenticated/citizen': typeof AuthenticatedCitizenRoute
   '/_authenticated/complaints': typeof AuthenticatedComplaintsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
@@ -129,10 +129,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
-    | '/admin'
     | '/applications'
     | '/apply'
     | '/assistant'
+    | '/citizen'
     | '/complaints'
     | '/dashboard'
     | '/profile'
@@ -142,10 +142,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
-    | '/admin'
     | '/applications'
     | '/apply'
     | '/assistant'
+    | '/citizen'
     | '/complaints'
     | '/dashboard'
     | '/profile'
@@ -156,10 +156,10 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
-    | '/_authenticated/admin'
     | '/_authenticated/applications'
     | '/_authenticated/apply'
     | '/_authenticated/assistant'
+    | '/_authenticated/citizen'
     | '/_authenticated/complaints'
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
@@ -197,13 +197,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/admin': {
-      id: '/_authenticated/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthenticatedAdminRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/applications': {
       id: '/_authenticated/applications'
       path: '/applications'
@@ -223,6 +216,13 @@ declare module '@tanstack/react-router' {
       path: '/assistant'
       fullPath: '/assistant'
       preLoaderRoute: typeof AuthenticatedAssistantRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/citizen': {
+      id: '/_authenticated/citizen'
+      path: '/citizen'
+      fullPath: '/citizen'
+      preLoaderRoute: typeof AuthenticatedCitizenRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/complaints': {
@@ -264,10 +264,10 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedApplicationsRoute: typeof AuthenticatedApplicationsRoute
   AuthenticatedApplyRoute: typeof AuthenticatedApplyRoute
   AuthenticatedAssistantRoute: typeof AuthenticatedAssistantRoute
+  AuthenticatedCitizenRoute: typeof AuthenticatedCitizenRoute
   AuthenticatedComplaintsRoute: typeof AuthenticatedComplaintsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
@@ -275,10 +275,10 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedApplicationsRoute: AuthenticatedApplicationsRoute,
   AuthenticatedApplyRoute: AuthenticatedApplyRoute,
   AuthenticatedAssistantRoute: AuthenticatedAssistantRoute,
+  AuthenticatedCitizenRoute: AuthenticatedCitizenRoute,
   AuthenticatedComplaintsRoute: AuthenticatedComplaintsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
